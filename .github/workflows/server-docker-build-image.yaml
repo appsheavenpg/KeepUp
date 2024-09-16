@@ -34,6 +34,7 @@ jobs:
 
   deploy-server:
     runs-on: ubuntu-latest
+    needs: build-server-jar
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,7 +43,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: server-jar
-          path: server/build/libs/server-all.jar
+          path: server/build/libs
 
       - name: Deploy with Docker Compose
         working-directory: server
