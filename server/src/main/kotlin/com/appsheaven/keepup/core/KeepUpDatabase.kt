@@ -1,9 +1,10 @@
 package com.appsheaven.keepup.core
 
 import com.appsheaven.keepup.todos.Todo
-
-internal typealias DatabaseOperationResult = Boolean
+import com.mongodb.MongoException
+import com.mongodb.client.result.InsertOneResult
 
 internal interface KeepUpDatabase {
-    suspend fun insertTodo(todo: Todo): DatabaseOperationResult
+    @Throws(MongoException::class)
+    suspend fun insertTodo(todo: Todo): InsertOneResult
 }

@@ -1,12 +1,13 @@
 package com.appsheaven.keepup.database
 
-import com.appsheaven.keepup.core.DatabaseOperationResult
 import com.appsheaven.keepup.core.KeepUpDatabase
 import com.appsheaven.keepup.todos.Todo
+import com.mongodb.MongoException
 import com.mongodb.client.model.InsertOneOptions
+import com.mongodb.client.result.InsertOneResult
 import com.mongodb.kotlin.client.coroutine.MongoClient
 
-internal class MongoDatabase(
+internal class KeepUpMongoDatabase(
     mongoClient: MongoClient,
     databaseName: String = "keep-up",
     collectionName: String = "todos"
@@ -15,12 +16,8 @@ internal class MongoDatabase(
     private val database = mongoClient.getDatabase(databaseName)
     private val collection = database.getCollection<Todo>(collectionName)
 
-    override suspend fun insertTodo(todo: Todo): DatabaseOperationResult {
-        val result = collection.insertOne(
-            todo,
-            options = InsertOneOptions()
-        )
-
-        return result.wasAcknowledged()
+    @Throws(MongoException::class)
+    override suspend fun insertTodo(todo: Todo): InsertOneResult {
+        return collection.insertOne(todo, options = InsertOneOptions())
     }
 }
