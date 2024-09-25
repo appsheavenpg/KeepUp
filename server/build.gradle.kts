@@ -20,4 +20,6 @@ dependencies {
     implementation(libs.mongodb.bson.kotlinx)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.kotlin.test.mockk)
+    testImplementation(libs.kotlin.test.coroutines)
 }
