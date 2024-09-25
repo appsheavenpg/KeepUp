@@ -52,7 +52,7 @@ class MongoDatabaseTest {
         val actual = sut.insertTodo(todo)
 
         assertEquals(BsonObjectId(todo.id), actual.insertedId)
-        assertEquals(false, actual.wasAcknowledged())
+        assertEquals(true, actual.wasAcknowledged())
     }
 
     @Test
