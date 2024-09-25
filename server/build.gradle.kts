@@ -16,6 +16,10 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
+    implementation(libs.mongodb.driver.kotlin.coroutines)
+    implementation(libs.mongodb.bson.kotlinx)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.kotlin.test.mockk)
+    testImplementation(libs.kotlin.test.coroutines)
 }
