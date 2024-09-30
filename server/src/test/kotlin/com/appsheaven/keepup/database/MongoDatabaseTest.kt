@@ -4,6 +4,7 @@ import com.mongodb.MongoException
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.test.runTest
 import org.bson.BsonObjectId
+import org.bson.types.ObjectId
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.utility.DockerImageName
 import kotlin.test.AfterTest
@@ -47,5 +48,62 @@ class MongoDatabaseTest {
         sut.insertTodo(todo)
 
         assertFailsWith<MongoException> { sut.insertTodo(todo) }
+    }
+
+    @Test
+    fun `gets all todos`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+        val anotherTodo = todo.copy(_id = ObjectId())
+
+        sut.insertTodo(todo)
+        sut.insertTodo(anotherTodo)
+
+        val actual = sut.getTodos(page = 1, pageSize = 10)
+
+        assertEquals(listOf(todo, anotherTodo), actual)
+    }
+
+    @Test
+    fun `returns empty list when no todos`() = runTest {
+        val actual = sut.getTodos(page = 1, pageSize = 10)
+
+        assertEquals(emptyList(), actual)
+    }
+
+    @Test
+    fun `gets todo with pagination for page 1`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+        val anotherTodo = todo.copy(_id = ObjectId())
+
+        sut.insertTodo(todo)
+        sut.insertTodo(anotherTodo)
+
+        val actual = sut.getTodos(page = 1, pageSize = 1)
+
+        assertEquals(listOf(todo), actual)
+    }
+
+    @Test
+    fun `gets todo with pagination for page 2`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+        val anotherTodo = todo.copy(_id = ObjectId())
+
+        sut.insertTodo(todo)
+        sut.insertTodo(anotherTodo)
+
+        val actual = sut.getTodos(page = 2, pageSize = 1)
+
+        assertEquals(listOf(anotherTodo), actual)
+    }
+
+    @Test
+    fun `return empty list with single todo for page 2`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+
+        sut.insertTodo(todo)
+
+        val actual = sut.getTodos(page = 2, pageSize = 10)
+
+        assertEquals(emptyList(), actual)
     }
 }

@@ -7,4 +7,5 @@ import com.mongodb.client.result.InsertOneResult
 internal interface KeepUpDatabase {
     @Throws(MongoException::class)
     suspend fun insertTodo(todo: Todo): InsertOneResult
+    suspend fun getTodos(page: Int, pageSize: Int): List<Todo>
 }
