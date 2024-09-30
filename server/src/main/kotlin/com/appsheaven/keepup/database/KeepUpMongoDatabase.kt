@@ -6,6 +6,7 @@ import com.mongodb.MongoException
 import com.mongodb.client.model.InsertOneOptions
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.kotlin.client.coroutine.MongoClient
+import kotlinx.coroutines.flow.toList
 
 internal class KeepUpMongoDatabase(
     mongoClient: MongoClient,
@@ -19,5 +20,15 @@ internal class KeepUpMongoDatabase(
     @Throws(MongoException::class)
     override suspend fun insertTodo(todo: Todo): InsertOneResult {
         return collection.insertOne(todo, options = InsertOneOptions())
+    }
+
+    override suspend fun getTodos(page: Int, pageSize: Int): List<Todo> {
+        val currentPage = (page - 1).takeIf { it >= 0 } ?: 0
+        val skip = currentPage * pageSize
+        return collection
+            .find()
+            .skip(skip)
+            .limit(pageSize)
+            .toList()
     }
 }
