@@ -22,4 +22,12 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.kotlin.test.mockk)
     testImplementation(libs.kotlin.test.coroutines)
+    testImplementation(libs.test.containers)
+    testImplementation(libs.apache.commons.compress)
+    testImplementation(libs.test.containers.mongodb)
+    testImplementation(libs.test.containers.junit.jupiter)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
