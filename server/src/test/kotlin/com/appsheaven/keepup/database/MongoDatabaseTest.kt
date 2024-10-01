@@ -106,4 +106,17 @@ class MongoDatabaseTest {
 
         assertEquals(emptyList(), actual)
     }
+
+    @Test
+    fun `puts todo`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+
+        sut.insertTodo(todo)
+
+        val updatedTodo = todo.copy(title = "Updated title")
+        val actual = sut.putTodo(updatedTodo)
+
+        assertEquals(1, actual.matchedCount)
+        assertEquals(1, actual.modifiedCount)
+    }
 }
