@@ -5,10 +5,12 @@ import com.appsheaven.keepup.todos.Todo
 import com.mongodb.MongoException
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.InsertOneOptions
+import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.InsertOneResult
 import com.mongodb.client.result.UpdateResult
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.flow.toList
+import org.bson.types.ObjectId
 
 internal class KeepUpMongoDatabase(
     mongoClient: MongoClient,
@@ -38,5 +40,10 @@ internal class KeepUpMongoDatabase(
     override suspend fun putTodo(todo: Todo): UpdateResult {
         val filter = Filters.eq("_id", todo._id)
         return collection.replaceOne(filter, todo)
+    }
+
+    override suspend fun deleteTodoById(id: ObjectId): DeleteResult {
+        val filter = Filters.eq("_id", id)
+        return collection.deleteOne(filter)
     }
 }
