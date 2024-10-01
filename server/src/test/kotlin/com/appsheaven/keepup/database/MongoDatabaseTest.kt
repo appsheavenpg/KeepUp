@@ -119,4 +119,26 @@ class MongoDatabaseTest {
         assertEquals(1, actual.matchedCount)
         assertEquals(1, actual.modifiedCount)
     }
+
+    @Test
+    fun `deletes todo by id`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+
+        sut.insertTodo(todo)
+
+        val actual = sut.deleteTodoById(todo._id)
+
+        assertEquals(1, actual.deletedCount)
+    }
+
+    @Test
+    fun `deletes todo by id with no match`() = runTest {
+        val todo = MongoDatabaseFixtures.anyTodo
+
+        sut.insertTodo(todo)
+
+        val actual = sut.deleteTodoById(ObjectId())
+
+        assertEquals(0, actual.deletedCount)
+    }
 }
