@@ -1,5 +1,6 @@
 package com.appsheaven.keepup.database
 
+import com.appsheaven.keepup.todos.infrastructure.MongoTodoDatabase
 import com.mongodb.MongoException
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.test.runTest
@@ -17,13 +18,13 @@ class MongoDatabaseTest {
 
     private lateinit var dbContainer: MongoDBContainer
     private lateinit var client: MongoClient
-    private lateinit var sut: KeepUpMongoDatabase
+    private lateinit var sut: MongoTodoDatabase
 
     @BeforeTest
     fun before() {
         dbContainer = MongoDBContainer(DockerImageName.parse("mongo:latest")).apply { start() }
         client = MongoClient.create(dbContainer.connectionString)
-        sut = KeepUpMongoDatabase(client)
+        sut = MongoTodoDatabase(client)
     }
 
     @AfterTest
