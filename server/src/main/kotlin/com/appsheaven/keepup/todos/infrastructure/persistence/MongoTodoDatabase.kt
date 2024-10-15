@@ -1,7 +1,7 @@
-package com.appsheaven.keepup.todos.infrastructure
+package com.appsheaven.keepup.todos.infrastructure.persistence
 
-import com.appsheaven.keepup.todos.domain.TodoDatabase
-import com.appsheaven.keepup.todos.entities.Todo
+import com.appsheaven.keepup.todos.domain.services.TodoDatabase
+import com.appsheaven.keepup.todos.domain.entities.Todo
 import com.mongodb.MongoException
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.InsertOneOptions

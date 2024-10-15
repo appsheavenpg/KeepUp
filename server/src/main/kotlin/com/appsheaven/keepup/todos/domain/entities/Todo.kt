@@ -1,4 +1,4 @@
-package com.appsheaven.keepup.todos.entities
+package com.appsheaven.keepup.todos.domain.entities
 
 import org.bson.types.ObjectId
 

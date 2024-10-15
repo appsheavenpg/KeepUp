@@ -1,6 +1,6 @@
-package com.appsheaven.keepup.todos.domain
+package com.appsheaven.keepup.todos.domain.services
 
-import com.appsheaven.keepup.todos.entities.Todo
+import com.appsheaven.keepup.todos.domain.entities.Todo
 import com.mongodb.MongoException
 import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.InsertOneResult
