@@ -1,5 +1,7 @@
-package com.appsheaven.keepup.database
+package com.appsheaven.keepup.database.todo.infrastructure.persistence
 
+import com.appsheaven.keepup.database.todo.domain.TodoFixtures
+import com.appsheaven.keepup.todos.infrastructure.persistence.MongoTodoDatabase
 import com.mongodb.MongoException
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.test.runTest
@@ -13,17 +15,17 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class MongoDatabaseTest {
+class MongoTodoDatabaseTest {
 
     private lateinit var dbContainer: MongoDBContainer
     private lateinit var client: MongoClient
-    private lateinit var sut: KeepUpMongoDatabase
+    private lateinit var sut: MongoTodoDatabase
 
     @BeforeTest
     fun before() {
         dbContainer = MongoDBContainer(DockerImageName.parse("mongo:latest")).apply { start() }
         client = MongoClient.create(dbContainer.connectionString)
-        sut = KeepUpMongoDatabase(client)
+        sut = MongoTodoDatabase(client)
     }
 
     @AfterTest
@@ -33,7 +35,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `inserts new todo`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         val actual = sut.insertTodo(todo)
 
@@ -43,7 +45,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `throws on inserting todo with error`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         sut.insertTodo(todo)
 
@@ -52,7 +54,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `gets all todos`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
         val anotherTodo = todo.copy(_id = ObjectId())
 
         sut.insertTodo(todo)
@@ -72,7 +74,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `gets todo with pagination for page 1`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
         val anotherTodo = todo.copy(_id = ObjectId())
 
         sut.insertTodo(todo)
@@ -85,7 +87,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `gets todo with pagination for page 2`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
         val anotherTodo = todo.copy(_id = ObjectId())
 
         sut.insertTodo(todo)
@@ -98,7 +100,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `return empty list with single todo for page 2`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         sut.insertTodo(todo)
 
@@ -109,7 +111,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `puts todo`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         sut.insertTodo(todo)
 
@@ -122,7 +124,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `deletes todo by id`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         sut.insertTodo(todo)
 
@@ -133,7 +135,7 @@ class MongoDatabaseTest {
 
     @Test
     fun `deletes todo by id with no match`() = runTest {
-        val todo = MongoDatabaseFixtures.anyTodo
+        val todo = TodoFixtures.anyTodo
 
         sut.insertTodo(todo)
 

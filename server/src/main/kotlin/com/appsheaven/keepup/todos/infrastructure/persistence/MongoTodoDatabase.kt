@@ -1,7 +1,7 @@
-package com.appsheaven.keepup.database
+package com.appsheaven.keepup.todos.infrastructure.persistence
 
-import com.appsheaven.keepup.core.KeepUpDatabase
-import com.appsheaven.keepup.todos.Todo
+import com.appsheaven.keepup.todos.domain.services.TodoDatabase
+import com.appsheaven.keepup.todos.domain.entities.Todo
 import com.mongodb.MongoException
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.InsertOneOptions
@@ -12,11 +12,11 @@ import com.mongodb.kotlin.client.coroutine.MongoClient
 import kotlinx.coroutines.flow.toList
 import org.bson.types.ObjectId
 
-internal class KeepUpMongoDatabase(
+internal class MongoTodoDatabase(
     mongoClient: MongoClient,
     databaseName: String = "keep-up",
     collectionName: String = "todos"
-) : KeepUpDatabase {
+) : TodoDatabase {
 
     private val database = mongoClient.getDatabase(databaseName)
     private val collection = database.getCollection<Todo>(collectionName)
