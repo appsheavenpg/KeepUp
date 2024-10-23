@@ -1,4 +1,4 @@
-package com.appsheaven.keepup.database.todo.infrastructure.services
+package com.appsheaven.keepup.database.todo.routing
 
 import com.appsheaven.keepup.todos.routing.TodoExceptionMapper
 import com.mongodb.ErrorCategory
@@ -11,6 +11,7 @@ import io.ktor.server.request.ContentTransformationException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.serialization.SerializationException
+import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -60,7 +61,7 @@ class TodoExceptionMapperTest {
     @Test
     fun `returns InternalServerError when IOException is thrown`() {
         // Arrange
-        val exception = mockk<java.io.IOException>(relaxed = true)
+        val exception = mockk<IOException>(relaxed = true)
 
         // Act
         val (status, message) = todoExceptionMapper.toErrorResponse(exception)
