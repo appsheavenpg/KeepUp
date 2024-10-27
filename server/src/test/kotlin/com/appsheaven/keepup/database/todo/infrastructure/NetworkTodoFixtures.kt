@@ -10,4 +10,16 @@ object NetworkTodoFixtures {
         description = "description",
         completed = false
     )
+
+    val anyNetworkTodoRequestJson =
+        """
+        {
+            "item": {
+                "id": "${anyNetworkTodo.id}",
+                "title": "${anyNetworkTodo.title}",
+                "description": "${anyNetworkTodo.description}",
+                "completed": ${anyNetworkTodo.completed}
+            }
+        }
+        """.trimIndent()
 }

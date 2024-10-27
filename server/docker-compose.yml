@@ -6,6 +6,10 @@ services:
       - mongo
     ports:
       - "8080:8080"
+    environment:
+      - MONGODB_KEY=${MONGODB_KEY}
+    env_file:
+      - .env
   mongo:
     image: mongo:latest
     ports:
