@@ -22,7 +22,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TodoRoutingTest {
+class TodoRoutingPostTodoTest {
 
     private lateinit var mockedTodoService: TodoService
     private lateinit var mockedExceptionMapper: ExceptionMapper
@@ -34,7 +34,7 @@ class TodoRoutingTest {
     }
 
     @Test
-    fun `test post todo`() = testApplication {
+    fun `should post todo`() = testApplication {
         // Arrange
         application { todoRouting(mockedTodoService, mockedExceptionMapper) }
 
