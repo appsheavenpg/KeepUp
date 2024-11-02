@@ -1,6 +1,8 @@
 package com.appsheaven.keepup.database.todo.infrastructure.services
 
+import com.appsheaven.keepup.database.todo.domain.TodoFixtures
 import com.appsheaven.keepup.database.todo.infrastructure.NetworkTodoFixtures
+import com.appsheaven.keepup.todos.domain.entities.toNetworkTodo
 import com.appsheaven.keepup.todos.domain.entities.toTodo
 import com.appsheaven.keepup.todos.domain.repositories.TodoRepository
 import com.appsheaven.keepup.todos.infrastructure.services.TodoServiceImpl
@@ -9,6 +11,9 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class TodoServiceImplTest {
 
@@ -16,24 +21,44 @@ class TodoServiceImplTest {
     private val sut = TodoServiceImpl(repository)
 
     @Test
-    fun `should get todos`() = runTest {
+    fun `should get todos with hasMore equal to false`() = runTest {
         // Arrange
         val page = 1
         val size = 10
+        coEvery { repository.getPagedTodos(any(), any()) } returns TodoFixtures.fiveTodos
 
         // Act
-        sut.getTodos(page, size)
+        val result = sut.getTodos(page, size)
 
         // Assert
-        coVerify(exactly = 1) { repository.getPagedTodos(page, size) }
+        val expected = TodoFixtures.fiveTodos.map { it.toNetworkTodo() }
+        assertEquals(expected, result.items)
+        assertFalse(result.hasMore)
     }
+
+    @Test
+    fun `should get todos with hasMore equal to true`() = runTest {
+        // Arrange
+        val page = 1
+        val size = 10
+        coEvery { repository.getPagedTodos(any(), any()) } returns TodoFixtures.fifteenTodos
+
+        // Act
+        val result = sut.getTodos(page, size)
+
+        // Assert
+        val expected = TodoFixtures.fifteenTodos.map { it.toNetworkTodo() }.take(size)
+        assertEquals(expected, result.items)
+        assertTrue(result.hasMore)
+    }
+
 
     @Test
     fun `should rethrow error when get todos fails`() = runTest {
         // Arrange
         val page = 1
         val size = 10
-        coEvery { repository.getPagedTodos(page, size) } throws Exception()
+        coEvery { repository.getPagedTodos(any(), any()) } throws Exception()
 
         // Act
         val result = kotlin.runCatching { sut.getTodos(page, size) }
